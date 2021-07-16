@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import Input from '../../UI/Input';
 import classes from './MealItemForm.module.css'
 
 const MealItemForm = props => {
-  const [ count, setCount] = useState(0)
+  const amountInputRef = useRef()
 
-  const countHandler = (event) => {
-    console.log('handler',count)
+  const submitHandler = (event) => {
     event.preventDefault()
-    setCount(count + 1)
+    
+    const enterAmount = amountInputRef.current.value;
+    const enterAmountNumber = +enterAmount;
+
+    if (enterAmount.trim().length === 0 || enterAmountNumber < 1 || enterAmountNumber > 5){
+      return;
+    }
+
+    props.onAddToCart(enterAmountNumber)
   }
 
   return (
-    <form onSubmit={countHandler} className= { classes.form }>
-      <Input label='Amount' input={{ 
+    <form onSubmit={submitHandler} className= { classes.form }>
+      <Input ref={ amountInputRef } label='Amount' input={{ 
         id: 'amount_' + props.id,
         type: 'number',
         min: '1',

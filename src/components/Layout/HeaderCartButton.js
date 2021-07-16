@@ -1,9 +1,20 @@
+import { useContext } from 'react';
+import CartContext from '../../store/cart-context';
 import CartIcon from '../Cart/CartIcon';
 import classes from './HeaderCartButton.module.css';
 
+
 const HeaderCartButton = props => {
+  const cartCtx = useContext(CartContext)
+
+  const numberOfCartitems = cartCtx.items.reduce((curNumber, item) => {
+    return curNumber + item.amount 
+  }, 0)
+
+  const btnClasses = `${classes.button} ${classes.bump}`
+
   return (
-    <button onClick={ props.showCartHandler } className={ classes.button }>
+    <button className={ btnClasses } onClick={ props.showCartHandler } >
       <span className={ classes.icon } >
         <CartIcon />
       </span>
@@ -11,7 +22,7 @@ const HeaderCartButton = props => {
         Your Chart 
       </span>
       <span className={ classes.badge }>
-        3
+        {numberOfCartitems}
       </span>
     </button>
   );
